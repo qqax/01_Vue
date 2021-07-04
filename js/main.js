@@ -7,10 +7,6 @@ $(function(){
     });
 });
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> bb74a1a (change thema and save in LocalStorage)
 let theme = {
     themeType: 'indigo-theme',
     secondaryColor: '4ebdd4',
@@ -40,11 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
     theme.update();
 });
 
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 27aff8a (restore project')
->>>>>>> bb74a1a (change thema and save in LocalStorage)
 $('.menu-btn').on('click', function () {
    $('.menu-wrapper').slideToggle('slow');
 });
@@ -63,7 +54,6 @@ $('#edit').on('click', function () {
     }
 });
 
-<<<<<<< HEAD
 $('.content-wrapper').on('click', () => {
     if (editPopupSwitcher) {
         editPopupSwitcher = !editPopupSwitcher;
@@ -89,22 +79,13 @@ let themePreview = {
     themeType: 'indigo-theme',
     secondaryColor: '4ebdd4',
 };
-<<<<<<< HEAD
-=======
 
-=======
-let preview = $('.preview-wrapper');
-let themeSelects = document.querySelectorAll('.theme-select');
->>>>>>> bb74a1a (change thema and save in LocalStorage)
-
->>>>>>> 27aff8a (restore project')
 $('.theme-select').on('click', function () {
     themeSelects.forEach(el => {
         el.classList.remove('selected-theme');
     });
 
     this.classList.add('selected-theme');
-<<<<<<< HEAD
 
     if (this.id === 'indigo') {
         preview[0].classList.value = 'preview-wrapper indigo-theme';
@@ -124,9 +105,4 @@ $('#save-theme-btn').on('click', () => {
     theme.themeType = themePreview.themeType;
     theme.secondaryColor = themePreview.secondaryColor;
     theme.update();
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 27aff8a (restore project')
->>>>>>> bb74a1a (change thema and save in LocalStorage)
 });
