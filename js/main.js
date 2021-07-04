@@ -34,4 +34,11 @@ $('.theme-select').on('click', function () {
     });
 
     this.classList.add('selected-theme');
+
+    if (this.id === 'indigo') {
+        preview[0].classList.value = 'preview-wrapper indigo-theme';
+    } else {
+        preview[0].classList.value = 'preview-wrapper black-theme';
+    }
 });
+
