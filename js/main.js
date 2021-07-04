@@ -25,6 +25,13 @@ $('#edit').on('click', function () {
     }
 });
 
+$('.content-wrapper').on('click', function () {
+    if (editPopupSwitcher) {
+        editPopupSwitcher = !editPopupSwitcher;
+        TweenMax.to(editPopup, 1, {x: '-200%', display: 'block', height: '0vh', ease: Power3.easeOut});
+    }
+});
+
 let preview = $('.preview-wrapper');
 let themeSelects = document.querySelectorAll('.theme-select');
 
