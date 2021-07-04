@@ -25,7 +25,7 @@ $('#edit').on('click', function () {
     }
 });
 
-$('.content-wrapper').on('click', function () {
+$('.content-wrapper').on('click', () => {
     if (editPopupSwitcher) {
         editPopupSwitcher = !editPopupSwitcher;
         TweenMax.to(editPopup, 1, {x: '-200%', display: 'block', height: '0vh', ease: Power3.easeOut});
@@ -34,6 +34,17 @@ $('.content-wrapper').on('click', function () {
 
 let preview = $('.preview-wrapper');
 let themeSelects = document.querySelectorAll('.theme-select');
+
+let previewChildes = function () {
+    let nodes = [];
+
+    let progressLine = $('.progress-line');
+
+    nodes.push(progressLine[progressLine.length - 1]);
+    nodes.push($('.preview-wrapper>a')[0]);
+
+    return nodes;
+}
 
 $('.theme-select').on('click', function () {
     themeSelects.forEach(el => {
@@ -47,5 +58,9 @@ $('.theme-select').on('click', function () {
     } else {
         preview[0].classList.value = 'preview-wrapper black-theme';
     }
+});
+
+$('.radio-item>label>span').on('click', (e) => {
+    previewChildes().forEach(el => el.style.backgroundColor = e.target.style.color);
 });
 
