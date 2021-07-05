@@ -10,7 +10,29 @@
     </div>
 
     <script>
-        console.log("its footer")
+        const tooltip = document.getElementsByClassName('tooltip_wrapper')[0];
+        const tooltipTarget = document.getElementById('text');
+
+        let isTooltipActive = false;
+
+        tooltipTarget.addEventListener('mouseover', () => {
+            tooltip.style.display = 'block';
+        });
+
+        tooltipTarget.addEventListener('mouseleave', () => {
+            setTimeout(() => {
+                if (!isTooltipActive) tooltip.style.display = 'none';
+            }, 1000);
+        });
+
+        tooltip.addEventListener('mouseover', () => {
+            isTooltipActive = true;
+        });
+
+        tooltip.addEventListener('mouseleave', () => {
+            tooltip.style.display = 'none';
+            isTooltipActive = false;
+        });
     </script>
 
 </footer>
