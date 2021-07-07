@@ -41,31 +41,9 @@ function drawPersonages(startIndex=0, endIndex=3) {
             TweenMax.to(this, 0.6, {y:'10%', ease: Back.easeOut});
         }
     });
-
-    // $('.personage-item_container').on('click', (e) => {
-    //     const elm = e.target.closest('div');
-    //     if (elm.style.transform === "translate(0%, 10%) matrix(1, 0, 0, 1, 0, 0)") {
-    //         TweenMax.to(elm, 0.6, {y:'70%', ease: Power4.easeOut});
-    //     } else {
-    //         TweenMax.to(elm, 0.6, {y:'10%', ease: Back.easeOut});
-    //     }
-    // });
 }
 
-window.onload = async function () {
-    let res = await fetch("https://swapi.dev/api/people").then(res => res.json());
-    peoples = res.results.map( (el, i) => {
-        el.i = i;
-        return el;
-    });
-
-    nextPeoplesPage = res.next;
-    prevPeoplesPage = res.previous;
-
-    drawPersonages();
-};
-
-const load = async function loadNewPeoplesPage(url) {
+const load = async function(url, startIndex=0, endIndex=3) {
     let {next, previous, results} = await fetch(url).then(res => res.json());
 
     nextPeoplesPage = next;
@@ -76,15 +54,23 @@ const load = async function loadNewPeoplesPage(url) {
         return el;
     });
 
-    drawPersonages();
+    drawPersonages(startIndex, endIndex);
 }
 
-document.getElementById('next').addEventListener('click', () => {
-    const lastInCurrentCup = cupPeoples[cupPeoples.length - 1].i;
+window.onload = () => load("https://swapi.dev/api/people");
 
-    if (lastInCurrentCup !== peoples.length - 1) {
-        drawPersonages(lastInCurrentCup + 1, lastInCurrentCup + 4);
-    } else if (nextPeoplesPage) {
-        load(nextPeoplesPage);
-    }
+document.getElementById('next').addEventListener('click', () => {
+    paginatation(cupPeoples[cupPeoples.length - 1].i, 1, 4, nextPeoplesPage, peoples.length-1);
 });
+
+document.getElementById('prev').addEventListener('click', () => {
+    paginatation(cupPeoples[0].i, -3, 0, prevPeoplesPage, 0,9, 10);
+});
+
+function paginatation(targetInCurrentCup, firstTargetIndex, secondTargetIndex, peoplesPage, check , startIndex= 0, endIndex = 3) {
+    if (targetInCurrentCup !== check) {
+        drawPersonages(targetInCurrentCup + firstTargetIndex, targetInCurrentCup + secondTargetIndex);
+    } else if (peoplesPage) {
+        load(peoplesPage, startIndex, endIndex);
+    }
+}
