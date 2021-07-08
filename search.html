@@ -9,17 +9,17 @@
 </head>
 <body>
 
-    <div id="search">
+    <div id="search" @click="eventTarget($event.target)">
 
-        <a class="viewed-btn btn-floating waves-effect" @click="showMenu = !showMenu">
+        <a id="menu" class="viewed-btn btn-floating waves-effect" @click="showMenu = !showMenu">
             <i class="material-icons">turned_in_not</i>
         </a>
 
-        <div class="viewed-menu card" v-show="showMenu">
+        <div id="viewed-menu" class="viewed-menu card" v-show="showMenu">
             <ul v-if="viewedFilms.length > 0">
                 <li v-for="(film, i) in viewedFilms">
                     <span>{{++i}}. {{film.title}}</span>
-                    <a class="btn btn-small" @click="deleteFilm(film)">удалить</a>
+                    <a class="btn btn-small" @click.stop="deleteFilm(film)">удалить</a>
                 </li>
             </ul>
 
@@ -30,7 +30,7 @@
         <h5>{{computedHeader}}</h5>
 
         <div id="search-console">
-            <input type="text" id="search-input" style="color: #595959" v-model="request">
+            <input type="text" id="search-input" style="color: #595959" v-model.trim="request" @focus="request = ''">
         </div>
 
         <div class="card film-card" v-for="(film, i) in filteredFilms" v-bind:id="i">
@@ -59,12 +59,12 @@
             },
             computed: { //вычисляемые данные, помещаемые в id=search с помощью {{computedHeader}} - можно в разные места
                 computedHeader() {
-                    return this.request.trim() === '' || this.request === initHeader
+                    return this.request === '' || this.request === initHeader
                         ? "Ничего не ищем"
                         : this.request.toUpperCase();
                 },
                 filteredFilms() {
-                    if ( this.request !== initHeader && this.request.trim() !== '') {
+                    if ( this.request !== initHeader && this.request !== '') {
                         return this.films.filter(el => el.title.toLowerCase().includes(this.request.toLowerCase()))
                     } else {
                         return this.films;
@@ -79,6 +79,11 @@
                 },
                 deleteFilm({title}) {
                     this.viewedFilms = this.viewedFilms.filter(el => el.title !== title);
+                },
+                eventTarget(target) {
+                    if (!(target.closest('#menu') || target.closest('#viewed-menu'))) {
+                        this.showMenu = false;
+                    }
                 }
             },
             async mounted() {
