@@ -33,7 +33,7 @@
             <input type="text" id="search-input" style="color: #595959" v-model="request">
         </div>
 
-        <div class="card film-card" v-for="(film, i) in films" v-bind:id="i">
+        <div class="card film-card" v-for="(film, i) in filteredFilms" v-bind:id="i">
             <p>{{++i}}. {{film.title}}</p>
 <!--            <a class="btn waves-effect" @click="viewedFilms.indexOf(film) === -1 && viewedFilms.push(film)">Добавить просмотренное</a>-->
             <a class="btn waves-effect" @click="addFilmToMenu(film)">Добавить просмотренное</a>
@@ -45,23 +45,30 @@
     <script src="https://unpkg.com/vue"></script>
 
     <script>
-        const textHeader =" Что ищешь ты, о воин, впечатай не медля...";
+        const initHeader =" Что ищешь ты, о воин, впечатай не медля...";
 
         const vm = new Vue({
             //опции приложения
             el: "#search", //элемент для модификации
             data: { //данные, помещаемые в id=search с помощью {{header}}
                 header: "Hello!",
-                request: textHeader,
+                request: initHeader,
                 films: [],
                 viewedFilms: [],
                 showMenu: false
             },
             computed: { //вычисляемые данные, помещаемые в id=search с помощью {{computedHeader}} - можно в разные места
                 computedHeader() {
-                    return this.request === '' || this.request === textHeader
+                    return this.request.trim() === '' || this.request === initHeader
                         ? "Ничего не ищем"
                         : this.request.toUpperCase();
+                },
+                filteredFilms() {
+                    if ( this.request !== initHeader && this.request.trim() !== '') {
+                        return this.films.filter(el => el.title.toLowerCase().includes(this.request.toLowerCase()))
+                    } else {
+                        return this.films;
+                    }
                 }
             },
             methods: {
