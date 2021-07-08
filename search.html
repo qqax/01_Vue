@@ -11,25 +11,33 @@
 
     <div id="search">
 
-        <a class="viewed-btn btn-floating waves-effect"><i class="material-icons">turned_in_not</i></a>
+        <a class="viewed-btn btn-floating waves-effect" @click="showMenu = !showMenu">
+            <i class="material-icons">turned_in_not</i>
+        </a>
 
-        <div class="viewed-menu card" style="display: none">
-            <ul>
-                <li>
-                    <span>first</span>
-                    <a class="btn btn-small">удалить</a>
+        <div class="viewed-menu card" v-show="showMenu">
+            <ul v-if="viewedFilms.length > 0">
+                <li v-for="(film, i) in viewedFilms">
+                    <span>{{++i}}. {{film.title}}</span>
+                    <a class="btn btn-small" @click="deleteFilm(film)">удалить</a>
                 </li>
-                <li>second</li>
-                <li>third</li>
             </ul>
+
+            <span v-else>У вас нет просмотренных фильмов</span>
         </div>
 
-        <h5>Привет</h5>
+        <h5>{{header}} Бузендорф, {{request.toLowerCase()}}</h5>
+        <h5>{{computedHeader}}</h5>
 
         <div id="search-console">
-            <input type="text" id="search-input" style="color: #595959">
+            <input type="text" id="search-input" style="color: #595959" v-model="request">
         </div>
 
+        <div class="card film-card" v-for="(film, i) in films" v-bind:id="i">
+            <p>{{++i}}. {{film.title}}</p>
+<!--            <a class="btn waves-effect" @click="viewedFilms.indexOf(film) === -1 && viewedFilms.push(film)">Добавить просмотренное</a>-->
+            <a class="btn waves-effect" @click="addFilmToMenu(film)">Добавить просмотренное</a>
+        </div>
 
     </div>
 
@@ -37,8 +45,38 @@
     <script src="https://unpkg.com/vue"></script>
 
     <script>
-        let vm = new Vue({
-            //опции нашего приложения
+        const textHeader =" Что ищешь ты, о воин, впечатай не медля...";
+
+        const vm = new Vue({
+            //опции приложения
+            el: "#search", //элемент для модификации
+            data: { //данные, помещаемые в id=search с помощью {{header}}
+                header: "Hello!",
+                request: textHeader,
+                films: [],
+                viewedFilms: [],
+                showMenu: false
+            },
+            computed: { //вычисляемые данные, помещаемые в id=search с помощью {{computedHeader}} - можно в разные места
+                computedHeader() {
+                    return this.request === '' || this.request === textHeader
+                        ? "Ничего не ищем"
+                        : this.request.toUpperCase();
+                }
+            },
+            methods: {
+                addFilmToMenu(film) {
+                    if ( !this.viewedFilms.find(el => el.title === film.title) ) {
+                        this.viewedFilms.push(film);
+                    }
+                },
+                deleteFilm({title}) {
+                    this.viewedFilms = this.viewedFilms.filter(el => el.title !== title);
+                }
+            },
+            async mounted() {
+                this.films =  await fetch("https://swapi.dev/api/films/").then(res => res.json()).then(data => data.results);
+            }
         })
     </script>
 
